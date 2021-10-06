@@ -1,12 +1,43 @@
 import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { StyleSheet, Text, View,Button } from 'react-native';
+import { TextInput } from 'react-native-gesture-handler';
+import { ListContainer } from './components/ListContainer';
 
 export default function App() {
+
+  const[change,setChange]=useState('')
+  const[task,setTask]=useState([])
+  const handleChange=(enteredText)=>{
+      setChange(enteredText)
+  }
+  const handleSubmit=()=>{
+    setTask((prev)=>([
+      ...prev,
+      change
+    ]))
+    console.log(task)
+  }
+  const handleDelete=(index)=>()=>{
+    const deletedArray=task.filter((_item,i)=> i !==index)
+    setTask(deletedArray)
+    
+  }
+
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
+    <View>
+      <View style={styles.container}>
+        <Text>To do List</Text>
+        <TextInput
+          placeholder='Add the task...'
+          onChangeText={handleChange}
+          value={change}
+        />
+        <Button onPress={handleSubmit} title='Add task'/>
+      </View>
+      <View>
+        <ListContainer list={task} onDelete={handleDelete}/>
+      </View>
     </View>
   );
 }
